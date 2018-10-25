@@ -10,7 +10,7 @@ Students are expected to:
 Student Info
 =======================
 
-* Name: *YourNameHere*
-* ID: *YourIdHere*
-* Group ID: *Your Group ID here*
-* Project Name: *Your Project Name here*
+* Name: Do Duy Huy Hoang
+* ID: USTHBI7-071 
+* Group ID: 8 
+* Project Name: Email Client  
