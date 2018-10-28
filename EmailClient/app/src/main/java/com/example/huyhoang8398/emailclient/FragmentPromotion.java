@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,27 +12,9 @@ import android.view.ViewGroup;
 
 
 public class FragmentPromotion extends Fragment {
-        // Store instance variables
-        private String titlePromotion;
-        private int pagePromotion;
+    public FragmentPromotion(){
 
-        // newInstance constructor for creating fragment with arguments
-        public static FragmentPromotion newInstance(int page, String title) {
-            FragmentPromotion fragmentFirst = new FragmentPromotion();
-            Bundle args = new Bundle();
-            args.putInt("someInt", page);
-            args.putString("someTitle", title);
-            fragmentFirst.setArguments(args);
-            return fragmentFirst;
-        }
-
-        // Store instance variables based on arguments passed
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            pagePromotion = getArguments().getInt("Promotion", 0);
-            titlePromotion = getArguments().getString("Promotion");
-        }
+    }
 
         // Inflate the view for the fragment based on layout XML
         @Override
@@ -41,4 +24,18 @@ public class FragmentPromotion extends Fragment {
 
             return viewPromotion;
         }
+
+    public static FragmentPromotion newInstance() {
+        
+        Bundle args = new Bundle();
+        
+        FragmentPromotion fragment = new FragmentPromotion();
+        fragment.setArguments(args);
+        return fragment;
     }
+
+
+    public static class newInstance extends Fragment {
+        
+    }
+}

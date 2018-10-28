@@ -13,6 +13,9 @@ import android.widget.TextView;
 public class FragmentPrimary extends Fragment {
 
         // Inflate the view for the fragment based on layout XML
+    public FragmentPrimary(){
+
+    }
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
