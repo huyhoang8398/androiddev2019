@@ -22,8 +22,8 @@ import android.support.v7.app.AppCompatActivity;
 public class AllMailFragment extends Fragment {
 
     public class HomeFragmentPagerAdapter extends FragmentPagerAdapter {
-        private final int PAGE_COUNT = 3;
-        private String titles[] = new String[] { "Primary", "Social", "Promotions" };
+        private final int PAGE_COUNT = 4;
+        private String titles[] = new String[] { "Primary", "Social", "Promotions" , "All mail"};
         public HomeFragmentPagerAdapter(FragmentManager fm) {
             super(fm);
         }
@@ -35,16 +35,17 @@ public class AllMailFragment extends Fragment {
         public Fragment getItem(int page) {
 // returns an instance of Fragment corresponding to the specified page
             switch (page) {
-                case 0: return Fragment1.newInstance();
-                case 1: return Fragment2.newInstance();
-                case 2: return Fragment3.newInstance();
+                case 0: return new AllMailFragment();
+                case 1: return new FragmentPrimary();
+                case 2: return new FragmentSocial();
+                case 3: return new FragmentPromotion();
             }
-            return null; // failsafe
+            return new AllMailFragment(); // failsafe
         }
         @Override
-        public CharSequence getPageTitle(int page) {
+        public CharSequence getPageTitle(int position) {
 // returns a tab title corresponding to the specified page
-            return titles[page];
+            return titles[position];
         }
     }
 
@@ -67,6 +68,7 @@ public class AllMailFragment extends Fragment {
         return  viewAllMail;
 
     }
+
 
 
 }
