@@ -12,8 +12,13 @@ import android.view.ViewGroup;
 
 
 public class FragmentPromotion extends Fragment {
-    public FragmentPromotion(){
+    public static FragmentPromotion newInstance() {
 
+        Bundle args = new Bundle();
+
+        FragmentPromotion fragment = new FragmentPromotion();
+        fragment.setArguments(args);
+        return fragment;
     }
 
         // Inflate the view for the fragment based on layout XML
@@ -24,18 +29,4 @@ public class FragmentPromotion extends Fragment {
 
             return viewPromotion;
         }
-
-    public static FragmentPromotion newInstance() {
-        
-        Bundle args = new Bundle();
-        
-        FragmentPromotion fragment = new FragmentPromotion();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-
-    public static class newInstance extends Fragment {
-        
-    }
 }

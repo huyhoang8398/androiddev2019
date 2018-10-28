@@ -5,23 +5,6 @@
     android:layout_width="match_parent" android:layout_height="match_parent"
     >
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="All mail Fragment"
-        android:textSize="30sp"
-        android:layout_centerInParent="true"/>
-
-    <ImageButton
-        android:id="@+id/imageButton"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="28dp"
-        android:layout_marginEnd="24dp"
-        android:background="@drawable/roundcorner"
-        app:srcCompat="@drawable/ic_create" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewpager"

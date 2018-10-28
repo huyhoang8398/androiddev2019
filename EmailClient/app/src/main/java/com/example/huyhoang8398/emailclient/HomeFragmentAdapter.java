@@ -19,9 +19,9 @@ public class HomeFragmentAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int page) {
 // returns an instance of Fragment corresponding to the specified page
         switch (page) {
-            case 0: return new FragmentPrimary();
-            case 1: return new FragmentSocial();
-            case 2: return new FragmentPromotion.newInstance();
+            case 0: return FragmentPrimary.newInstance();
+            case 1: return FragmentSocial.newInstance();
+            case 2: return FragmentPromotion.newInstance();
         }
         return new FragmentPrimary(); // failsafe
     }

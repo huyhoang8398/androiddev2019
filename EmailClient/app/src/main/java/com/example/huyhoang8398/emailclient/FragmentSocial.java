@@ -11,8 +11,13 @@ import android.view.ViewGroup;
 
 
 public class FragmentSocial extends Fragment {
-    public FragmentSocial(){
-
+    public static FragmentSocial newInstance() {
+        
+        Bundle args = new Bundle();
+        
+        FragmentSocial fragment = new FragmentSocial();
+        fragment.setArguments(args);
+        return fragment;
     }
 
     // Inflate the view for the fragment based on layout XML
