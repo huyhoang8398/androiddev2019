@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +23,7 @@ public class AllMailFragment extends Fragment {
 
     public class HomeFragmentPagerAdapter extends FragmentPagerAdapter {
         private final int PAGE_COUNT = 3;
-        private String titles[] = new String[] { "Social", "Primary", "Promotions" };
+        private String titles[] = new String[] { "Primary", "Social", "Promotions" };
         public HomeFragmentPagerAdapter(FragmentManager fm) {
             super(fm);
         }
@@ -34,17 +35,38 @@ public class AllMailFragment extends Fragment {
         public Fragment getItem(int page) {
 // returns an instance of Fragment corresponding to the specified page
             switch (page) {
-                case 0: return new FragmentSocial();
-                case 1: return new FragmentPrimary();
-                case 2: return new FragmentPromotion();
+                case 0: return Fragment1.newInstance();
+                case 1: return Fragment2.newInstance();
+                case 2: return Fragment3.newInstance();
             }
-            return new FragmentPrimary(); // failsafe
+            return null; // failsafe
+        }
+        @Override
+        public CharSequence getPageTitle(int page) {
+// returns a tab title corresponding to the specified page
+            return titles[page];
         }
     }
+
+
+    ViewPager viewPager;
+    TabLayout tabLayout;
+    FragmentPagerAdapter adapterViewPager;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_allmail, container,false);
+
+        View viewAllMail = inflater.inflate(R.layout.fragment_allmail, container, false);
+        adapterViewPager = new HomeFragmentPagerAdapter(getFragmentManager());
+
+        viewPager = (ViewPager) viewPager.findViewById(R.id.viewpager);
+        viewPager.setOffscreenPageLimit(3);
+        viewPager.setAdapter(adapterViewPager);
+        tabLayout = (TabLayout) viewPager.findViewById(R.id.tablayout);
+        return  viewAllMail;
+
     }
+
+
 }
