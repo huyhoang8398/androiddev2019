@@ -15,8 +15,8 @@
 
     <ImageButton
         android:id="@+id/sendBtn1"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="69dp"
+        android:layout_height="67dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_marginBottom="28dp"
