@@ -15,7 +15,7 @@ import android.view.MenuItem;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener  {
     private DrawerLayout drawer;
     MaterialSearchView searchView;
 
@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         android.support.v7.widget.Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         searchView = (MaterialSearchView) findViewById(R.id.search_view);
 
         drawer = findViewById(R.id.drawer_layout);
@@ -38,6 +39,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
 
         if (savedInstanceState == null){
+            getSupportActionBar().setTitle("All inboxes");
+
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                     new AllMailFragment()).commit();
             navigationView.setCheckedItem(R.id.nav_email);
@@ -60,18 +63,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()){
             case R.id.nav_sent:
+                getSupportActionBar().setTitle("Sent");
+
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         new SendFragment()).commit();
                 break;
             case R.id.nav_email:
+                getSupportActionBar().setTitle("All inboxes");
+
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         new AllMailFragment()).commit();
                 break;
             case R.id.nav_spam:
+                getSupportActionBar().setTitle("Spam");
+
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         new SpamFragment()).commit();
                 break;
             case R.id.nav_trash:
+                getSupportActionBar().setTitle("Trash");
+
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         new TrashFragment()).commit();
                 break;

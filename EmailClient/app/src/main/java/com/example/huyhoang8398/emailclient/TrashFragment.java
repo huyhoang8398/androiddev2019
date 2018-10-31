@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
+
 public class TrashFragment extends Fragment {
     @Nullable
     @Override
