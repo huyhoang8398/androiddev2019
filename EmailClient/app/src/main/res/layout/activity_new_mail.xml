@@ -1,55 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/linearLayout1"
+    android:showDividers="middle"
+    android:divider="?android:attr/dividerVertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
-
-    <TextView
-        android:id="@+id/destinationLable"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="To : "
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+    android:orientation="vertical">
 
     <EditText
-        android:id="@+id/destinationAddress"
+        android:id="@+id/et_username"
         android:layout_width="fill_parent"
+        android:padding="50px"
         android:layout_height="wrap_content"
-        android:inputType="textEmailAddress" >
+        android:background="@android:color/transparent"
+        android:hint="Username"/>
 
-        <requestFocus />
-
-    </EditText>
-
-    <TextView
-        android:id="@+id/subjectLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Subject : "
-        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <EditText
-        android:id="@+id/subject"
+        android:id="@+id/et_username1"
         android:layout_width="fill_parent"
+        android:background="@android:color/transparent"
+        android:padding="50px"
         android:layout_height="wrap_content"
-        >
-    </EditText>
-
-    <TextView
-        android:id="@+id/message_body_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Message : "
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <EditText
-        android:id="@+id/messageBody"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:gravity="top"
-        android:inputType="textMultiLine"
-        android:lines="5" />
+        android:hint="Username"/>
 
     <Button
         android:id="@+id/button"
