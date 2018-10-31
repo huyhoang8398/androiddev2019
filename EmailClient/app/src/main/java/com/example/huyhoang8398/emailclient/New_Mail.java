@@ -2,6 +2,7 @@ package com.example.huyhoang8398.emailclient;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 public class New_Mail extends AppCompatActivity {
@@ -13,6 +14,11 @@ public class New_Mail extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_mail);
+
+        //set new toolbar
+        Toolbar toolbarMail = (Toolbar) findViewById(R.id.toolbar_newmail);
+        setSupportActionBar(toolbarMail);
+
 
         /// add back button
         getSupportActionBar().setDisplayShowHomeEnabled(true);
