@@ -6,4 +6,9 @@
         android:title="attachment"
         app:showAsAction="always"/>
 
+    <item android:id="@+id/send"
+        android:icon="@drawable/ic_send_white"
+        android:title="send"
+        app:showAsAction="always"/>
+
 </menu>
