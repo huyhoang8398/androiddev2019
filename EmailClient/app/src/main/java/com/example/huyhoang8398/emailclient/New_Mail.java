@@ -1,5 +1,6 @@
 package com.example.huyhoang8398.emailclient;
 
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -15,9 +16,9 @@ public class New_Mail extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_mail);
 
-        //set new toolbar
-        Toolbar toolbarMail = (Toolbar) findViewById(R.id.toolbar_newmail);
-        setSupportActionBar(toolbarMail);
+        // edit action bar
+        ActionBar newMailBar = getSupportActionBar();
+            newMailBar.setTitle("New Mail");
 
 
         /// add back button
