@@ -33,7 +33,7 @@ public class FragmentPrimary extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ImageButton sendBtn = (ImageButton) view.findViewById(R.id.sendBtn1);
+        ImageButton sendBtn = view.findViewById(R.id.sendBtn1);
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
