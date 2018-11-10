@@ -15,8 +15,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 
@@ -25,6 +31,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     MaterialSearchView searchView;
     ImageView ProfPicNav;
     TextView NameNav, EmailNav;
+    GoogleApiClient mGoogleApiClient;
+
+    @Override
+    protected void onStart() {
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+        mGoogleApiClient.connect();
+        super.onStart();
+    }
 
 
     @Override
@@ -34,9 +53,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         android.support.v7.widget.Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-
-
 
 
         searchView = findViewById(R.id.search_view);
@@ -114,11 +130,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         new TrashFragment()).commit();
                 break;
+
+
+            case R.id.sign_out:
+                signOut();
+                break;
+
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
+
+    private void signOut() {
+        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                new ResultCallback<Status>() {
+                    @Override
+                    public void onResult(Status status) {
+                        // ...
+                        Toast.makeText(getApplicationContext(),"Logged Out",Toast.LENGTH_SHORT).show();
+                        mGoogleApiClient.clearDefaultAccountAndReconnect();
+                        Intent i=new Intent(getApplicationContext(),LoginActivity.class);
+                        startActivity(i);
+                    }
+                });
+
+    }
     @Override
     public void onBackPressed(){
         if (drawer.isDrawerOpen(GravityCompat.START)){
