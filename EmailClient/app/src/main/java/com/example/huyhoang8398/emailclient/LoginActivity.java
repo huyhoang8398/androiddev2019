@@ -98,8 +98,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             Email.setText(email);
             Glide.with(this).load(img_url).into(Prof_Pic);
             updateUI(true);
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(intent);
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra("name", name);
+            intent.putExtra("email", email);
+            intent.putExtra("img_prof", img_url);
+            this.startActivity(intent);
         }
         else {
             updateUI(false);
