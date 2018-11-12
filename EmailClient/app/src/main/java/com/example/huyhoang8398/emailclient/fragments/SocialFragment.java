@@ -1,8 +1,6 @@
-package com.example.huyhoang8398.emailclient;
+package com.example.huyhoang8398.emailclient.fragments;
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,13 +10,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
+import com.example.huyhoang8398.emailclient.NewMailActivity;
+import com.example.huyhoang8398.emailclient.R;
 
-public class FragmentSocial extends Fragment {
-    public static FragmentSocial newInstance() {
+
+public class SocialFragment extends Fragment {
+    public static SocialFragment newInstance() {
         
         Bundle args = new Bundle();
         
-        FragmentSocial fragment = new FragmentSocial();
+        SocialFragment fragment = new SocialFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -38,7 +39,7 @@ public class FragmentSocial extends Fragment {
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), New_Mail.class);
+                Intent intent = new Intent(getActivity(), NewMailActivity.class);
                 startActivity(intent);
             }
         });

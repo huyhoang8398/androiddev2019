@@ -1,4 +1,4 @@
-package com.example.huyhoang8398.emailclient;
+package com.example.huyhoang8398.emailclient.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+
+import com.example.huyhoang8398.emailclient.NewMailActivity;
+import com.example.huyhoang8398.emailclient.R;
 
 
 public class TrashFragment extends Fragment {
@@ -24,7 +27,7 @@ public class TrashFragment extends Fragment {
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), New_Mail.class);
+                Intent intent = new Intent(getActivity(), NewMailActivity.class);
                 startActivity(intent);
             }
         });

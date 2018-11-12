@@ -1,15 +1,14 @@
 package com.example.huyhoang8398.emailclient;
 
 import android.content.Intent;
-import android.os.Message;
+import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,32 +17,116 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.huyhoang8398.emailclient.fragments.AllMailFragment;
+import com.example.huyhoang8398.emailclient.fragments.SendFragment;
+import com.example.huyhoang8398.emailclient.fragments.SpamFragment;
+import com.example.huyhoang8398.emailclient.fragments.TrashFragment;
 import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.client.util.ExponentialBackOff;
+import com.google.api.services.gmail.Gmail;
+import com.google.api.services.gmail.GmailScopes;
+import com.google.api.services.gmail.model.ListMessagesResponse;
+import com.google.api.services.gmail.model.Message;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
-import com.google.api.services.gmail.*;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener  {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawer;
     MaterialSearchView searchView;
     ImageView ProfPicNav;
     TextView NameNav, EmailNav;
     GoogleApiClient mGoogleApiClient;
 
+    private static final String[] SCOPES = {GmailScopes.GMAIL_READONLY};
+
     @Override
     protected void onStart() {
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
-        mGoogleApiClient.connect();
+        //googleAuthen();
         super.onStart();
+
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+
+        System.out.println();
+
+        new MyTask().execute();
+
+    }
+
+
+    class MyTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            try {
+                String[] SCOPES = {
+                        GmailScopes.GMAIL_LABELS,
+                        GmailScopes.GMAIL_COMPOSE,
+                        GmailScopes.GMAIL_INSERT,
+                        GmailScopes.GMAIL_MODIFY,
+                        GmailScopes.GMAIL_READONLY,
+                        GmailScopes.MAIL_GOOGLE_COM
+                };
+
+                GoogleAccountCredential mCredential = GoogleAccountCredential.usingOAuth2(
+                        getApplicationContext(), Arrays.asList(SCOPES))
+                        .setBackOff(new ExponentialBackOff());
+
+                mCredential.setSelectedAccount(mCredential.getAllAccounts()[0]);
+
+                HttpTransport transport = AndroidHttp.newCompatibleTransport();
+                JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
+                Gmail service = new com.google.api.services.gmail.Gmail.Builder(
+                        transport, jsonFactory, mCredential)
+                        .setApplicationName(getResources().getString(R.string.app_name))
+                        .build();
+
+
+                List<Message> messages = listMessagesMatchingQuery(service, "me", "");
+
+                System.out.println();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        public List<Message> listMessagesMatchingQuery(Gmail service, String userId, String query) throws IOException {
+            ListMessagesResponse response = service.users().messages().list(userId).execute();
+
+            List<Message> messages = new ArrayList<Message>();
+            while (response.getMessages() != null) {
+                messages.addAll(response.getMessages());
+                if (response.getNextPageToken() != null) {
+                    String pageToken = response.getNextPageToken();
+                    response = service.users().messages().list(userId).setQ(query).setPageToken(pageToken).execute();
+                } else {
+                    break;
+                }
+            }
+            return null;
+        }
     }
 
 
@@ -70,7 +153,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         Intent intent = this.getIntent();
 
-        String nameNav= intent.getStringExtra("name");
+        String nameNav = intent.getStringExtra("name");
         String emailNav = intent.getStringExtra("email");
         String imgUrlNav = intent.getStringExtra("img_prof");
         Glide.with(this).load(imgUrlNav).into(ProfPicNav);
@@ -79,15 +162,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NameNav.setText(nameNav);
         EmailNav.setText(emailNav);
 
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer,toolbar,R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        if (savedInstanceState == null){
+        if (savedInstanceState == null) {
             getSupportActionBar().setTitle("All inboxes");
-
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                    new AllMailFragment()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AllMailFragment()).commit();
             navigationView.setCheckedItem(R.id.nav_email);
         }
 
@@ -106,7 +187,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        switch (menuItem.getItemId()){
+        switch (menuItem.getItemId()) {
             case R.id.nav_sent:
                 getSupportActionBar().setTitle("Sent");
 
@@ -149,20 +230,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     @Override
                     public void onResult(Status status) {
                         // ...
-                        Toast.makeText(getApplicationContext(),"Logged Out",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Logged Out", Toast.LENGTH_SHORT).show();
                         mGoogleApiClient.clearDefaultAccountAndReconnect();
-                        Intent i=new Intent(getApplicationContext(),LoginActivity.class);
+                        Intent i = new Intent(getApplicationContext(), LoginActivity.class);
                         startActivity(i);
                     }
                 });
 
     }
+
     @Override
-    public void onBackPressed(){
-        if (drawer.isDrawerOpen(GravityCompat.START)){
+    public void onBackPressed() {
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer((GravityCompat.START));
-        }
-        else {
+        } else {
             super.onBackPressed();
         }
     }

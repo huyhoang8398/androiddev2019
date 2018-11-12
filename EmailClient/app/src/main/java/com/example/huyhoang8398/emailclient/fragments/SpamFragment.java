@@ -1,4 +1,4 @@
-package com.example.huyhoang8398.emailclient;
+package com.example.huyhoang8398.emailclient.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,11 +10,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
-public class SendFragment extends Fragment {
+import com.example.huyhoang8398.emailclient.NewMailActivity;
+import com.example.huyhoang8398.emailclient.R;
+
+public class SpamFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_sent, container,false);
+        return inflater.inflate(R.layout.fragment_spam, container,false);
     }
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -23,11 +26,9 @@ public class SendFragment extends Fragment {
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), New_Mail.class);
+                Intent intent = new Intent(getActivity(), NewMailActivity.class);
                 startActivity(intent);
             }
         });
     }
-
-
 }

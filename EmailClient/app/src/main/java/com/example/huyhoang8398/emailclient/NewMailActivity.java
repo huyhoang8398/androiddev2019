@@ -1,25 +1,21 @@
 package com.example.huyhoang8398.emailclient;
 
 import android.content.Intent;
-import android.media.Image;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class New_Mail extends AppCompatActivity {
-    public New_Mail(){
+public class NewMailActivity extends AppCompatActivity {
+    private static final int PICK_IMAGE = 100;
+    MenuItem attachment;
+    Uri imageUri;
+    public NewMailActivity() {
 
     }
-    MenuItem attachment;
-    private static final int PICK_IMAGE = 100;
-    Uri imageUri;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,10 +24,10 @@ public class New_Mail extends AppCompatActivity {
 
         // edit action bar
         ActionBar newMailBar = getSupportActionBar();
-            newMailBar.setTitle("New Mail");
+        newMailBar.setTitle("New Mail");
 
 
-            //get menu item
+        //get menu item
 
         /// add back button
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -44,10 +40,10 @@ public class New_Mail extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         int id = item.getItemId();
-        if (id == android.R.id.home){
+        if (id == android.R.id.home) {
             this.finish();
         }
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.attach_img:
                 openGallery();
 
@@ -63,7 +59,6 @@ public class New_Mail extends AppCompatActivity {
         Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
         startActivityForResult(gallery, PICK_IMAGE);
     }
-
 
 
     @Override
