@@ -22,6 +22,7 @@ import com.example.huyhoang8398.emailclient.fragments.AllMailFragment;
 import com.example.huyhoang8398.emailclient.fragments.SendFragment;
 import com.example.huyhoang8398.emailclient.fragments.SpamFragment;
 import com.example.huyhoang8398.emailclient.fragments.TrashFragment;
+import com.example.huyhoang8398.emailclient.interfaces.GmailSendMail;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
@@ -93,6 +94,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         new TaskRequestAllowAcess().execute();
+
+
+        //new GmailSendMail(this).execute();
 
     }
 

@@ -23,5 +23,7 @@ public class DetailActivity extends AppCompatActivity {
         tv_content = findViewById(R.id.tv_content);
         tv_content.setText(message.getSnippet());
 
+
+
     }
 }
