@@ -1,4 +1,4 @@
-package com.example.huyhoang8398.emailclient;
+package com.example.huyhoang8398.emailclient.activity;
 
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -17,18 +17,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.huyhoang8398.emailclient.R;
 import com.example.huyhoang8398.emailclient.fragments.AllMailFragment;
 import com.example.huyhoang8398.emailclient.fragments.SendFragment;
 import com.example.huyhoang8398.emailclient.fragments.SpamFragment;
 import com.example.huyhoang8398.emailclient.fragments.TrashFragment;
 import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
@@ -36,13 +36,10 @@ import com.google.api.client.util.ExponentialBackOff;
 import com.google.api.services.gmail.Gmail;
 import com.google.api.services.gmail.GmailScopes;
 import com.google.api.services.gmail.model.ListMessagesResponse;
-import com.google.api.services.gmail.model.Message;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -51,83 +48,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     ImageView ProfPicNav;
     TextView NameNav, EmailNav;
     GoogleApiClient mGoogleApiClient;
-
-    private static final String[] SCOPES = {GmailScopes.GMAIL_READONLY};
-
-    @Override
-    protected void onStart() {
-        //googleAuthen();
-        super.onStart();
-
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-
-        System.out.println();
-
-        new MyTask().execute();
-
-    }
-
-
-    class MyTask extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            try {
-                String[] SCOPES = {
-                        GmailScopes.GMAIL_LABELS,
-                        GmailScopes.GMAIL_COMPOSE,
-                        GmailScopes.GMAIL_INSERT,
-                        GmailScopes.GMAIL_MODIFY,
-                        GmailScopes.GMAIL_READONLY,
-                        GmailScopes.MAIL_GOOGLE_COM
-                };
-
-                GoogleAccountCredential mCredential = GoogleAccountCredential.usingOAuth2(
-                        getApplicationContext(), Arrays.asList(SCOPES))
-                        .setBackOff(new ExponentialBackOff());
-
-                mCredential.setSelectedAccount(mCredential.getAllAccounts()[0]);
-
-                HttpTransport transport = AndroidHttp.newCompatibleTransport();
-                JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
-                Gmail service = new com.google.api.services.gmail.Gmail.Builder(
-                        transport, jsonFactory, mCredential)
-                        .setApplicationName(getResources().getString(R.string.app_name))
-                        .build();
-
-
-                List<Message> messages = listMessagesMatchingQuery(service, "me", "");
-
-                System.out.println();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            return null;
-        }
-
-        public List<Message> listMessagesMatchingQuery(Gmail service, String userId, String query) throws IOException {
-            ListMessagesResponse response = service.users().messages().list(userId).execute();
-
-            List<Message> messages = new ArrayList<Message>();
-            while (response.getMessages() != null) {
-                messages.addAll(response.getMessages());
-                if (response.getNextPageToken() != null) {
-                    String pageToken = response.getNextPageToken();
-                    response = service.users().messages().list(userId).setQ(query).setPageToken(pageToken).execute();
-                } else {
-                    break;
-                }
-            }
-            return null;
-        }
-    }
 
 
     @Override
@@ -172,6 +92,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             navigationView.setCheckedItem(R.id.nav_email);
         }
 
+        new TaskRequestAllowAcess().execute();
 
     }
 
@@ -245,6 +166,49 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             drawer.closeDrawer((GravityCompat.START));
         } else {
             super.onBackPressed();
+        }
+    }
+
+    void requestAllowAccess() {
+        try {
+
+            // request permission
+            String[] SCOPES = {
+                    GmailScopes.GMAIL_LABELS,
+                    GmailScopes.GMAIL_COMPOSE,
+                    GmailScopes.GMAIL_INSERT,
+                    GmailScopes.GMAIL_MODIFY,
+                    GmailScopes.GMAIL_READONLY,
+                    GmailScopes.MAIL_GOOGLE_COM
+            };
+
+            GoogleAccountCredential mCredential = GoogleAccountCredential.usingOAuth2(
+                    this, Arrays.asList(SCOPES))
+                    .setBackOff(new ExponentialBackOff());
+
+            mCredential.setSelectedAccount(mCredential.getAllAccounts()[0]);
+
+            HttpTransport transport = AndroidHttp.newCompatibleTransport();
+            JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
+            Gmail service = new com.google.api.services.gmail.Gmail.Builder(
+                    transport, jsonFactory, mCredential)
+                    .setApplicationName(getResources().getString(R.string.app_name))
+                    .build();
+
+            ListMessagesResponse response = service.users().messages().list("me").execute();
+        } catch (UserRecoverableAuthIOException e1) {
+            startActivityForResult(e1.getIntent(), 100);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    class TaskRequestAllowAcess extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... voids) {
+            requestAllowAccess();
+            return null;
         }
     }
 

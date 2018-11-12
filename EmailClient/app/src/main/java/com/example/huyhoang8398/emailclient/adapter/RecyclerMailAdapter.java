@@ -9,27 +9,42 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.huyhoang8398.emailclient.R;
-import com.example.huyhoang8398.emailclient.model.Email;
+import com.example.huyhoang8398.emailclient.interfaces.OnItemClickListener;
+import com.google.api.services.gmail.model.Message;
+import com.google.api.services.gmail.model.MessagePartHeader;
 
 import java.util.List;
 
 public class RecyclerMailAdapter extends RecyclerView.Adapter<RecyclerMailAdapter.MyViewHolder> {
 
-    private List<Email> emails;
+    private List<Message> emails;
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+    private OnItemClickListener listener;
+
+    public void setListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
+
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView subject, description, sender_name;
 
-        public MyViewHolder(View view) {
+        public MyViewHolder(View view, OnItemClickListener listener) {
             super(view);
             subject = (TextView) view.findViewById(R.id.subject);
             description = (TextView) view.findViewById(R.id.description);
             sender_name = (TextView) view.findViewById(R.id.sender_name);
+            view.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            if (listener != null)
+                listener.onItemClick(view, getAdapterPosition());
         }
     }
 
 
-    public RecyclerMailAdapter(List<Email> emails) {
+    public RecyclerMailAdapter(List<Message> emails) {
         this.emails = emails;
     }
 
@@ -37,19 +52,42 @@ public class RecyclerMailAdapter extends RecyclerView.Adapter<RecyclerMailAdapte
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.email_list_row, parent, false);
-        return new MyViewHolder(itemView);
+        MyViewHolder holder = new MyViewHolder(itemView, listener);
+        return holder;
     }
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        Email email = emails.get(position);
-        holder.subject.setText(email.getSubject());
-        holder.sender_name.setText(email.getSenderName());
-        holder.description.setText(email.getDescription());
+        Message email = emails.get(position);
+        List<MessagePartHeader> part = email.getPayload().getHeaders();
+
+        for (int i = 0; i < part.size(); i++) {
+            String key = part.get(i).getName();
+            switch (key) {
+                case "Subject": {
+                    holder.subject.setText(part.get(i).getValue());
+                    break;
+                }
+                case "From": {
+                    holder.sender_name.setText(part.get(i).getValue());
+                    break;
+                }
+            }
+        }
+
+        String fullDescription = email.getSnippet();
+        String description = fullDescription.length() > 50 ? fullDescription.substring(0, 49) : fullDescription;
+        holder.description.setText(description);
     }
 
     @Override
     public int getItemCount() {
         return emails.size();
+    }
+
+    public void update(List<Message> email) {
+        emails.clear();
+        emails.addAll(email);
+        notifyDataSetChanged();
     }
 }

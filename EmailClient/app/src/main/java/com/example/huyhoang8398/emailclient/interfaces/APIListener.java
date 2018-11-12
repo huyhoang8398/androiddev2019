@@ -1,4 +1,4 @@
-package com.example.huyhoang8398.emailclient.api;
+package com.example.huyhoang8398.emailclient.interfaces;
 
 
 /**

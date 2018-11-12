@@ -1,4 +1,4 @@
-package com.example.huyhoang8398.emailclient;
+package com.example.huyhoang8398.emailclient.activity;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -8,6 +8,8 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.example.huyhoang8398.emailclient.R;
 
 public class NewMailActivity extends AppCompatActivity {
     private static final int PICK_IMAGE = 100;

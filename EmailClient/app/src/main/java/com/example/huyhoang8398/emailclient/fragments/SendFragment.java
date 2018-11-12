@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
-import com.example.huyhoang8398.emailclient.NewMailActivity;
+import com.example.huyhoang8398.emailclient.activity.NewMailActivity;
 import com.example.huyhoang8398.emailclient.R;
 
 public class SendFragment extends Fragment {
