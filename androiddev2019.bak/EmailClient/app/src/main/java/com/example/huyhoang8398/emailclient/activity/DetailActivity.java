@@ -2,6 +2,7 @@ package com.example.huyhoang8398.emailclient.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.example.huyhoang8398.emailclient.R;
@@ -28,6 +29,10 @@ public class DetailActivity extends AppCompatActivity {
         tv_receiver = findViewById(R.id.tv_receiver_name);
         tv_date = findViewById(R.id.tv_receiver_date);
         tv_content = findViewById(R.id.tv_content);
+
+        /// add back button
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         MessageSingleton messageSingleton = MessageSingleton.getInstance();
         Message message = messageSingleton.getMessage();
@@ -57,5 +62,17 @@ public class DetailActivity extends AppCompatActivity {
         String content = message.getSnippet();
         tv_content.setText(content);
 
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            this.finish();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
