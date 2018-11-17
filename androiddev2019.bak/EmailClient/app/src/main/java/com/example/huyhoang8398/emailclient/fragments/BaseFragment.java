@@ -36,6 +36,8 @@ public class BaseFragment extends Fragment {
     private List<Message> messages;
     RecyclerMailAdapter mailAdapter;
 
+    public String nameCurrentFragment;
+
     protected GmailAPIRequester api;
 
 
@@ -68,6 +70,7 @@ public class BaseFragment extends Fragment {
                 MessageSingleton instance = MessageSingleton.getInstance();
                 instance.setMessage(currentMail);
                 Intent intent = new Intent(context, DetailActivity.class);
+                intent.putExtra("flag",nameCurrentFragment);
                 startActivity(intent);
             }
         });

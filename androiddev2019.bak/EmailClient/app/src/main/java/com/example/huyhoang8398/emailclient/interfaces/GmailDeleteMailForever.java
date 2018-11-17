@@ -17,20 +17,21 @@ import com.google.api.services.gmail.model.Message;
 import java.io.IOException;
 import java.util.Arrays;
 
-public class GmailDeleteMail extends AsyncTask<String, Void, Void> {
+public class GmailDeleteMailForever extends AsyncTask<String, Void, Void> {
     private APIListener listener;
     private Context context;
     private Gmail service;
 
-    public GmailDeleteMail(Context context) {
+    public GmailDeleteMailForever(Context context) {
         this.context = context;
     }
 
-    public static void trashMessage(Gmail service, String user, String msgId)
+    public static void untrashMessage(Gmail service, String userId, String msgId)
             throws IOException {
-        service.users().messages().trash(user, msgId).execute();
-        System.out.println("Message with id: " + msgId + " has been trashed.");
+        service.users().messages().untrash(userId, msgId).execute();
+        System.out.println("Message with id: " + msgId + " has been untrashed.");
     }
+
 
 
     public void setListener(APIListener listener) {
@@ -73,7 +74,7 @@ public class GmailDeleteMail extends AsyncTask<String, Void, Void> {
         String msgID = strings[0];
         String userId = "me";
         try {
-            trashMessage(service,userId,msgID);
+            untrashMessage(service,userId,msgID);
 
         } catch (IOException e) {
             e.printStackTrace();

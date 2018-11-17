@@ -15,6 +15,8 @@ import com.example.huyhoang8398.emailclient.R;
 
 public class SpamFragment extends BaseFragment {
     public SpamFragment() {
+        nameCurrentFragment = "Spam";
+
 
     }
 

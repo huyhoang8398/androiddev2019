@@ -16,6 +16,8 @@ import com.example.huyhoang8398.emailclient.R;
 
 public class StarredFragment extends BaseFragment {
     public StarredFragment() {
+        nameCurrentFragment = "Starred";
+
 
     }
 

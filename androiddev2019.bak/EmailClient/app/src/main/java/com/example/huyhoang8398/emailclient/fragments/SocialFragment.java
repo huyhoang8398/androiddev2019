@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 public class SocialFragment extends BaseFragment {
 
     public SocialFragment() {
+        nameCurrentFragment = "Social";
+
 
     }
 

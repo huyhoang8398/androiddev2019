@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 public class ImportantMailFragment extends BaseFragment{
     public ImportantMailFragment() {
+        nameCurrentFragment = "Important";
 
     }
 

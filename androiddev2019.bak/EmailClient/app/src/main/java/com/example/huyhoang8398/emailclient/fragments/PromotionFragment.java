@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 public class PromotionFragment extends BaseFragment {
 
     public PromotionFragment() {
+        nameCurrentFragment = "Promotion";
+
 
     }
 

@@ -18,6 +18,8 @@ import com.example.huyhoang8398.emailclient.R;
 
 public class PrimaryFragment extends BaseFragment {
     public PrimaryFragment() {
+        nameCurrentFragment = "Primary";
+
 
     }
 

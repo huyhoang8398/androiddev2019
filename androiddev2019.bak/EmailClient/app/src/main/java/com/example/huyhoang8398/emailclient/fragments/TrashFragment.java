@@ -15,8 +15,9 @@ import com.example.huyhoang8398.emailclient.R;
 
 
 public class TrashFragment extends BaseFragment {
-    public TrashFragment() {
 
+    public TrashFragment() {
+        nameCurrentFragment = "Trash";
     }
 
     // Inflate the view for the fragment based on layout XML

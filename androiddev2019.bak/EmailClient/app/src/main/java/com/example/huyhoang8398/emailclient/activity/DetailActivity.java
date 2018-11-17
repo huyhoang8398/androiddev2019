@@ -1,5 +1,6 @@
 package com.example.huyhoang8398.emailclient.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -8,6 +9,7 @@ import android.webkit.WebView;
 import android.widget.TextView;
 import com.example.huyhoang8398.emailclient.R;
 import com.example.huyhoang8398.emailclient.interfaces.GmailDeleteMail;
+import com.example.huyhoang8398.emailclient.interfaces.GmailDeleteMailForever;
 import com.example.huyhoang8398.emailclient.interfaces.MessageSingleton;
 import com.google.api.client.util.Base64;
 import com.google.api.client.util.StringUtils;
@@ -25,7 +27,7 @@ public class DetailActivity extends AppCompatActivity {
     TextView tv_subject, tv_sender, tv_date, tv_receiver;
     private TextView tv_content;
     private WebView webView;
-
+    public String count;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,9 +40,15 @@ public class DetailActivity extends AppCompatActivity {
         tv_content = findViewById(R.id.tv_content);
 //        webView = findViewById(R.id.webview);
 
+
         /// add back button
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
+        Intent intent = getIntent();
+        String nameFragement = intent.getStringExtra("flag");
+        count = nameFragement;
 
         MessageSingleton messageSingleton = MessageSingleton.getInstance();
         Message message = messageSingleton.getMessage();
@@ -92,6 +100,49 @@ public class DetailActivity extends AppCompatActivity {
 // webView.loadData(mailBody, "text/html; charset=UTF-8", null);
 
     }
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if(count.equals("Trash")){
+            menu.findItem(R.id.action_delete).setVisible(false);
+            menu.findItem(R.id.action_delete_forever).setVisible(true);
+        }
+        if(count.equals("Spam")) {
+            menu.findItem(R.id.action_delete).setVisible(true);
+            menu.findItem(R.id.action_delete_forever).setVisible(false);
+        }
+        if(count.equals("Starred")) {
+            menu.findItem(R.id.action_delete).setVisible(true);
+            menu.findItem(R.id.action_delete_forever).setVisible(false);
+        }
+        if(count.equals("Primary")) {
+            menu.findItem(R.id.action_delete).setVisible(true);
+            menu.findItem(R.id.action_delete_forever).setVisible(false);
+        }
+        if(count.equals("Promotion")) {
+            menu.findItem(R.id.action_delete).setVisible(true);
+            menu.findItem(R.id.action_delete_forever).setVisible(false);
+        }
+        if(count.equals("Send")) {
+            menu.findItem(R.id.action_delete).setVisible(true);
+            menu.findItem(R.id.action_delete_forever).setVisible(false);
+        }
+        if(count.equals("Important")) {
+            menu.findItem(R.id.action_delete).setVisible(true);
+            menu.findItem(R.id.action_delete_forever).setVisible(false);
+        }
+
+        if(count.equals("Draft")) {
+            menu.findItem(R.id.action_delete).setVisible(true);
+            menu.findItem(R.id.action_delete_forever).setVisible(false);
+        }
+        if(count.equals("Social")) {
+            menu.findItem(R.id.action_delete).setVisible(true);
+            menu.findItem(R.id.action_delete_forever).setVisible(false);
+        }
+
+
+        return super.onPrepareOptionsMenu(menu);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -103,23 +154,33 @@ public class DetailActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         int id = item.getItemId();
         if (id == android.R.id.home) {
             this.finish();
         }
         switch (item.getItemId()) {
             case R.id.action_delete:
+
                 delMail();
 
+            case R.id.action_delete_forever:
+                delMailForever();
         }
+
         return super.onOptionsItemSelected(item);
+    }
+
+    private void delMailForever() {
+        MessageSingleton messageSingleton = MessageSingleton.getInstance();
+        Message message = messageSingleton.getMessage();
+        String msgID =  message.getId();
+        new GmailDeleteMailForever(this).execute(msgID);
     }
 
     private void delMail() {
         MessageSingleton messageSingleton = MessageSingleton.getInstance();
         Message message = messageSingleton.getMessage();
-        String msgID =  message.getId(); // phai lay duoc tu trong message dang chon. no co trong message day
+        String msgID =  message.getId();
         new GmailDeleteMail(this).execute(msgID);
 
     }

@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 public class DraftFragment  extends  BaseFragment{
     public DraftFragment() {
+        nameCurrentFragment = "Draft";
 
     }
 
