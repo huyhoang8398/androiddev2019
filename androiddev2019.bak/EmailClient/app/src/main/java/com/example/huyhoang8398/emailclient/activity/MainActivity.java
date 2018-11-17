@@ -93,8 +93,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         String nameNav = intent.getStringExtra("name");
         String emailNav = intent.getStringExtra("email");
-        String imgUrlNav = intent.getStringExtra("img_prof");
-        Glide.with(this).load(imgUrlNav).into(ProfPicNav);
+//        String imgUrlNav = intent.getStringExtra("img_prof");
+//        Glide.with(this).load(imgUrlNav).into(ProfPicNav);
 
 
         NameNav.setText(nameNav);
@@ -205,6 +205,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         Toast.makeText(getApplicationContext(), "Logged Out", Toast.LENGTH_SHORT).show();
                         mGoogleApiClient.clearDefaultAccountAndReconnect();
                         Intent i = new Intent(getApplicationContext(), LoginActivity.class);
+                        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(i);
                     }
                 });

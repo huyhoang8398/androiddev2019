@@ -75,7 +75,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         String[] permission = {Manifest.permission.INTERNET,
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.ACCESS_NETWORK_STATE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+//                Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.GET_ACCOUNTS,
                 Manifest.permission.READ_CONTACTS};
 
@@ -136,15 +136,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             GoogleSignInAccount account = result.getSignInAccount();
             String name = account.getDisplayName();
             String email = account.getEmail();
-            String img_url = account.getPhotoUrl().toString();
+//            String img_url = account.getPhotoUrl().toString();
             Name.setText(name);
             Email.setText(email);
-            Glide.with(this).load(img_url).into(Prof_Pic);
+//            Glide.with(this).load(img_url).into(Prof_Pic);
             updateUI(true);
             Intent intent = new Intent(this, MainActivity.class);
             intent.putExtra("name", name);
             intent.putExtra("email", email);
-            intent.putExtra("img_prof", img_url);
+//            intent.putExtra("img_prof", img_url);
             this.startActivity(intent);
         } else {
             updateUI(false);
