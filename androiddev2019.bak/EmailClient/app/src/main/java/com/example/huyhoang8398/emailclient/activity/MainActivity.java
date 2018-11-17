@@ -28,6 +28,7 @@ import com.example.huyhoang8398.emailclient.fragments.StarredFragment;
 import com.example.huyhoang8398.emailclient.fragments.TrashFragment;
 import com.example.huyhoang8398.emailclient.interfaces.GmailSendMail;
 import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
@@ -53,6 +54,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     ImageView ProfPicNav;
     TextView NameNav, EmailNav;
     GoogleApiClient mGoogleApiClient;
+
+    @Override
+    protected void onStart() {
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+        mGoogleApiClient.connect();
+        super.onStart();
+    }
 
 
     @Override
