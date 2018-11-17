@@ -18,7 +18,7 @@ public class NewMailActivity extends AppCompatActivity {
     MenuItem attachment;
     Uri imageUri;
 
-    EditText ed_from;
+    EditText ed_from, ed_to, ed_subject, ed_content;
 
     public NewMailActivity() {
 
@@ -30,6 +30,9 @@ public class NewMailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_new_mail);
 
         ed_from = findViewById(R.id.new_mail_from);
+        ed_content =findViewById(R.id.new_mail_compose);
+        ed_to = findViewById(R.id.new_mail_to);
+        ed_subject = findViewById(R.id.new_mail_subject);
 
         // edit action bar
         ActionBar newMailBar = getSupportActionBar();
@@ -43,20 +46,19 @@ public class NewMailActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        sendMail();
 
     }
     /// add back button
 
 
     private void sendMail(){
-        String from = "huyhoang8398@gmail.com";
-        String to = "huyhoang8398@gmail.com";
-        String subject = "hello";
-        String content = "hello";
+        String from = ed_from.getText().toString();
+        String to = ed_to.getText().toString();
+        String subject = ed_subject.getText().toString();
+        String content = ed_content.getText().toString();
 
 
-        new GmailSendMail(this).execute(from,to,subject,content);
+        new GmailSendMail(this).execute(to,from,subject,content);
 
     }
 
@@ -72,6 +74,10 @@ public class NewMailActivity extends AppCompatActivity {
             case R.id.attach_img:
                 openGallery();
 
+                break;
+
+            case R.id.send:
+                sendMail();
                 break;
         }
 

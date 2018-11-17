@@ -9,11 +9,12 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccoun
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
-import com.google.api.client.util.Base64;
 import com.google.api.client.util.ExponentialBackOff;
 import com.google.api.services.gmail.Gmail;
 import com.google.api.services.gmail.GmailScopes;
 import com.google.api.services.gmail.model.Message;
+
+import org.apache.commons.codec.binary.Base64;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -129,9 +130,10 @@ public class GmailSendMail extends AsyncTask<String, Void, Message> {
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
         emailContent.writeTo(buffer);
         byte[] bytes = buffer.toByteArray();
-        String encodedEmail = Base64.encodeBase64URLSafeString(bytes);
+        String encodedString = new String(Base64.encodeBase64(bytes));
+//        String encodedEmail = Base64.encodeBase64URLSafeString(bytes);
         Message message = new Message();
-        message.setRaw(encodedEmail);
+        message.setRaw(encodedString);
         return message;
     }
 

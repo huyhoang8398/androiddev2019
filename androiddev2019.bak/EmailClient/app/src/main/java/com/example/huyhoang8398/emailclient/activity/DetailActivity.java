@@ -8,6 +8,8 @@ import com.example.huyhoang8398.emailclient.R;
 import com.example.huyhoang8398.emailclient.interfaces.MessageSingleton;
 import com.google.api.services.gmail.model.Message;
 import com.google.api.services.gmail.model.MessagePartHeader;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.binary.StringUtils;
 
 import java.util.List;
 
@@ -45,6 +47,9 @@ public class DetailActivity extends AppCompatActivity {
                 case "To": {
                     tv_receiver.setText(partHeader.get(i).getValue());
                     break;
+                }
+                case "Date":{
+                    tv_date.setText(partHeader.get(i).getValue());
                 }
             }
         }
