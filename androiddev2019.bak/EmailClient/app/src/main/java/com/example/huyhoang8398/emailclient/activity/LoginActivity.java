@@ -41,7 +41,7 @@ import java.io.IOException;
 import java.util.Arrays;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener {
-    private LinearLayout Prof_Section;
+    private LinearLayout Prof_Section, logoApp;
     private Button SignOut;
     private TextView Name, Email;
     private SignInButton SignIn;
@@ -54,6 +54,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         askPermission();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        logoApp = (LinearLayout) findViewById(R.id.logoGmail);
         Prof_Section = (LinearLayout) findViewById(R.id.prof_section);
         SignOut = (Button) findViewById(R.id.bn_logout);
         SignOut.setOnClickListener(this);
@@ -154,9 +155,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void updateUI(boolean isLogin) {
         if (isLogin) {
+            logoApp.setVisibility(View.GONE);
             Prof_Section.setVisibility(View.VISIBLE);
             SignIn.setVisibility(View.GONE);
         } else {
+            logoApp.setVisibility(View.VISIBLE);
             Prof_Section.setVisibility(View.GONE);
             SignIn.setVisibility(View.VISIBLE);
         }
