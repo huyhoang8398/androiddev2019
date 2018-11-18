@@ -7,6 +7,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.webkit.WebView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.example.huyhoang8398.emailclient.R;
 import com.example.huyhoang8398.emailclient.interfaces.GmailDeleteMail;
 import com.example.huyhoang8398.emailclient.interfaces.GmailDeleteMailForever;
@@ -173,14 +175,14 @@ public class DetailActivity extends AppCompatActivity {
         }
         switch (item.getItemId()) {
             case R.id.action_delete:
-
                 delMail();
-
+                break;
             case R.id.action_delete_forever:
                 delMailForever();
-
+                break;
             case R.id.send_from_draft:
                 sendFromDraft();
+                break;
         }
 
         return super.onOptionsItemSelected(item);
@@ -211,6 +213,8 @@ public class DetailActivity extends AppCompatActivity {
         Message message = messageSingleton.getMessage();
         String msgID =  message.getId();
         new GmailDeleteMailForever(this).execute(msgID);
+        Toast.makeText(this, "The message has been deleted", Toast.LENGTH_SHORT).show();
+
     }
 
     private void delMail() {
@@ -218,6 +222,8 @@ public class DetailActivity extends AppCompatActivity {
         Message message = messageSingleton.getMessage();
         String msgID =  message.getId();
         new GmailDeleteMail(this).execute(msgID);
+        Toast.makeText(this, "The message has been moved to trash", Toast.LENGTH_SHORT).show();
+
 
     }
 }

@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.huyhoang8398.emailclient.R;
 import com.example.huyhoang8398.emailclient.interfaces.GmailDraft;
@@ -71,8 +72,15 @@ public class ReplyActivity extends AppCompatActivity {
         String content = ed_content.getText().toString();
 
 
-        new GmailSendMail(this).execute(to,from,subject,content);
+        if (to.matches("") || from.matches("") || content.matches("") || subject.matches("")) {
+            Toast.makeText(this, "You have to input full information", Toast.LENGTH_SHORT).show();
+        } else {
 
+            new GmailSendMail(this).execute(to, from, subject, content);
+            Toast.makeText(this, "The message has been sent", Toast.LENGTH_SHORT).show();
+
+
+        }
     }
 
 
@@ -88,11 +96,11 @@ public class ReplyActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.attach_img:
                 openGallery();
-
                 break;
 
             case R.id.send:
                 sendMail();
+                this.finish();
                 break;
         }
 
@@ -107,6 +115,8 @@ public class ReplyActivity extends AppCompatActivity {
 
 
         new GmailDraft(this).execute(to,from,subject,content);
+        Toast.makeText(this, "The message has been saved to draft", Toast.LENGTH_SHORT).show();
+
 
     }
     // open gallery
