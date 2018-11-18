@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.huyhoang8398.emailclient.R;
 import com.example.huyhoang8398.emailclient.interfaces.GmailDraft;
@@ -52,15 +53,22 @@ public class NewMailActivity extends AppCompatActivity {
     /// add back button
 
 
-    private void sendMail(){
+    private void sendMail() {
         String from = ed_from.getText().toString();
         String to = ed_to.getText().toString();
         String subject = ed_subject.getText().toString();
         String content = ed_content.getText().toString();
 
+        if (to.matches("") || from.matches("") || content.matches("") || subject.matches("")) {
+            Toast.makeText(this, "You have to input full information", Toast.LENGTH_SHORT).show();
+            return;
+        } else {
 
-        new GmailSendMail(this).execute(to,from,subject,content);
+            new GmailSendMail(this).execute(to, from, subject, content);
+            Toast.makeText(this, "The message has been sent", Toast.LENGTH_SHORT).show();
 
+
+        }
     }
 
     private void createDraft(){
@@ -71,6 +79,9 @@ public class NewMailActivity extends AppCompatActivity {
 
 
         new GmailDraft(this).execute(to,from,subject,content);
+        Toast.makeText(this, "The message has been saved to draft", Toast.LENGTH_SHORT).show();
+
+
 
     }
 
@@ -91,6 +102,7 @@ public class NewMailActivity extends AppCompatActivity {
 
             case R.id.send:
                 sendMail();
+                this.finish();
                 break;
         }
 
