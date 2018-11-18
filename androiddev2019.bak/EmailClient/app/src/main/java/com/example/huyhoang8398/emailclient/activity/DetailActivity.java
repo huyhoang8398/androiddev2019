@@ -38,7 +38,7 @@ public class DetailActivity extends AppCompatActivity {
         tv_receiver = findViewById(R.id.tv_receiver_name);
         tv_date = findViewById(R.id.tv_receiver_date);
         tv_content = findViewById(R.id.tv_content);
-//        webView = findViewById(R.id.webview);
+        webView = findViewById(R.id.webview);
 
 
         /// add back button
@@ -78,23 +78,23 @@ public class DetailActivity extends AppCompatActivity {
 
 //get webview instead of text view body content
 //
-//        String mailBody = "";
-//        String mimeType = message.getPayload().getMimeType();
-//        List<MessagePart> part2 = message.getPayload().getParts();
-//        if (mimeType.contains("alternative")) {
-//            for (MessagePart part : part2) {
-//                mailBody = new String(Base64.decodeBase64(part.getBody().getData().getBytes()));
-//            }
-//        }
+        String mailBody = "";
+        String mimeType = message.getPayload().getMimeType();
+        List<MessagePart> part2 = message.getPayload().getParts();
+        if (mimeType.contains("alternative")) {
+            for (MessagePart part : part2) {
+                mailBody = new String(Base64.decodeBase64(part.getBody().getData().getBytes()));
+            }
+        }
 
 
         String content = message.getSnippet();
         tv_content.setText(content);
 
         // get webview
-//        String header = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>";
-//        webView.loadData(header+mailBody, "text/html", "UTF-8");
-////
+        String header = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>";
+        webView.loadData(header+mailBody, "text/html", "UTF-8");
+//
 //
 //
 // webView.loadData(mailBody, "text/html; charset=UTF-8", null);

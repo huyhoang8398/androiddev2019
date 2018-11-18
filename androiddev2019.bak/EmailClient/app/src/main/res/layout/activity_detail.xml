@@ -76,14 +76,14 @@
 <TextView
 android:id="@+id/tv_content"
 android:layout_width="match_parent"
-android:layout_height="match_parent"
+android:layout_height="wrap_content"
 android:layout_marginTop="@dimen/margin_large" />
 
-    <!--<WebView-->
-        <!--android:id="@+id/webview"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_marginTop="@dimen/margin_small">-->
-    <!--</WebView>-->
+    <WebView
+        android:id="@+id/webview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/margin_small">
+    </WebView>
 
 </LinearLayout>
