@@ -105,39 +105,52 @@ public class DetailActivity extends AppCompatActivity {
         if(count.equals("Trash")){
             menu.findItem(R.id.action_delete).setVisible(false);
             menu.findItem(R.id.action_delete_forever).setVisible(true);
+            menu.findItem(R.id.send_from_draft).setVisible(false);
+
         }
         if(count.equals("Spam")) {
             menu.findItem(R.id.action_delete).setVisible(true);
             menu.findItem(R.id.action_delete_forever).setVisible(false);
+            menu.findItem(R.id.send_from_draft).setVisible(false);
+
         }
         if(count.equals("Starred")) {
             menu.findItem(R.id.action_delete).setVisible(true);
+
+            menu.findItem(R.id.send_from_draft).setVisible(false);
             menu.findItem(R.id.action_delete_forever).setVisible(false);
         }
         if(count.equals("Primary")) {
+            menu.findItem(R.id.send_from_draft).setVisible(false);
             menu.findItem(R.id.action_delete).setVisible(true);
             menu.findItem(R.id.action_delete_forever).setVisible(false);
         }
         if(count.equals("Promotion")) {
+            menu.findItem(R.id.send_from_draft).setVisible(false);
             menu.findItem(R.id.action_delete).setVisible(true);
             menu.findItem(R.id.action_delete_forever).setVisible(false);
         }
         if(count.equals("Send")) {
+            menu.findItem(R.id.send_from_draft).setVisible(false);
             menu.findItem(R.id.action_delete).setVisible(true);
             menu.findItem(R.id.action_delete_forever).setVisible(false);
         }
         if(count.equals("Important")) {
+            menu.findItem(R.id.send_from_draft).setVisible(false);
             menu.findItem(R.id.action_delete).setVisible(true);
             menu.findItem(R.id.action_delete_forever).setVisible(false);
         }
 
         if(count.equals("Draft")) {
+            menu.findItem(R.id.send_from_draft).setVisible(true);
             menu.findItem(R.id.action_delete).setVisible(true);
             menu.findItem(R.id.action_delete_forever).setVisible(false);
         }
         if(count.equals("Social")) {
             menu.findItem(R.id.action_delete).setVisible(true);
             menu.findItem(R.id.action_delete_forever).setVisible(false);
+            menu.findItem(R.id.send_from_draft).setVisible(false);
+
         }
 
 
@@ -165,9 +178,32 @@ public class DetailActivity extends AppCompatActivity {
 
             case R.id.action_delete_forever:
                 delMailForever();
+
+            case R.id.send_from_draft:
+                sendFromDraft();
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void sendFromDraft() {
+        MessageSingleton messageSingleton = MessageSingleton.getInstance();
+        Message message = messageSingleton.getMessage();
+
+        List<MessagePartHeader> partHeader = message.getPayload().getHeaders();
+
+        String subject = partHeader.get(4).getValue();
+        String from = partHeader.get(1).getValue();
+        String to = partHeader.get(2).getValue();
+
+        String body = message.getSnippet();
+
+        Intent intent = new Intent(this, ReplyActivity.class);
+        intent.putExtra("to", to);
+        intent.putExtra("from", from);
+        intent.putExtra("body", body);
+        intent.putExtra("subject", subject);
+        this.startActivity(intent);
     }
 
     private void delMailForever() {

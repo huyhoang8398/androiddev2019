@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
 
         if (savedInstanceState == null) {
-            getSupportActionBar().setTitle("All inboxes");
+            getSupportActionBar().setTitle("All inbox");
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AllMailFragment()).commit();
             navigationView.setCheckedItem(R.id.nav_email);
         }

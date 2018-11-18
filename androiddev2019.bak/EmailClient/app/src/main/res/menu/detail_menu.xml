@@ -13,5 +13,11 @@
         android:orderInCategory="100"
         android:title="Detele Forever"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/send_from_draft"
+        android:icon="@drawable/ic_send_white"
+        android:orderInCategory="100"
+        android:title="Send from draft"
+        app:showAsAction="always" />
 
 </menu>

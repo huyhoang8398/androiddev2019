@@ -31,6 +31,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.DetailActivity"></activity>
+        <activity android:name=".activity.ReplyActivity"></activity>
     </application>
 
 </manifest>
