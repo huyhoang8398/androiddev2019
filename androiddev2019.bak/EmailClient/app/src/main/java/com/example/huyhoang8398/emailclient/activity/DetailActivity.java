@@ -176,9 +176,11 @@ public class DetailActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_delete:
                 delMail();
+                onBackPressed();
                 break;
             case R.id.action_delete_forever:
                 delMailForever();
+                onBackPressed();
                 break;
             case R.id.send_from_draft:
                 sendFromDraft();
