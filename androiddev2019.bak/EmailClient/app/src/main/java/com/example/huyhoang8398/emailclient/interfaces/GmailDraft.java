@@ -20,19 +20,14 @@ import org.apache.commons.codec.binary.Base64;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Properties;
 
-import javax.mail.BodyPart;
 import javax.mail.MessagingException;
-import javax.mail.Multipart;
 import javax.mail.Session;
 import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
 
-public class GmailSendMail extends AsyncTask<String, Void, Message> {
+public class GmailDraft extends AsyncTask<String, Void, Draft> {
 
     private APIListener listener;
     private Context context;
@@ -42,7 +37,7 @@ public class GmailSendMail extends AsyncTask<String, Void, Message> {
         this.listener = listener;
     }
 
-    public GmailSendMail(Context context) {
+    public GmailDraft(Context context) {
         this.context = context;
     }
 
@@ -76,7 +71,7 @@ public class GmailSendMail extends AsyncTask<String, Void, Message> {
     }
 
     @Override
-    protected Message doInBackground(String... params) {
+    protected Draft doInBackground(String... params) {
 
         String from = params[0];
         String to = params[1];
@@ -88,8 +83,7 @@ public class GmailSendMail extends AsyncTask<String, Void, Message> {
             MimeMessage mimeMessage = createEmail(to,from,subject,body);
             //Message messageMail = createMessageWithEmail(mimeMessage);
             Draft draft = createDraft(service,"me", mimeMessage);
-            Message result = sendMessage(service,"me",mimeMessage);
-            return result;
+            return draft;
 
         } catch (MessagingException e) {
             e.printStackTrace();
@@ -102,7 +96,7 @@ public class GmailSendMail extends AsyncTask<String, Void, Message> {
     }
 
     @Override
-    protected void onPostExecute(Message email) {
+    protected void onPostExecute(Draft email) {
         super.onPostExecute(email);
         //listener.onRequestSuccess(email);
     }
@@ -139,8 +133,8 @@ public class GmailSendMail extends AsyncTask<String, Void, Message> {
     }
 
     public  Draft createDraft(Gmail service,
-                                    String userId,
-                                    MimeMessage emailContent)
+                              String userId,
+                              MimeMessage emailContent)
             throws MessagingException, IOException {
         Message message = createMessageWithEmail(emailContent);
 //        String userID = "me";
@@ -152,21 +146,6 @@ public class GmailSendMail extends AsyncTask<String, Void, Message> {
         System.out.println(draft.toPrettyString());
         return draft;
     }
-
-
-
-    public static Message sendMessage(Gmail service,
-                                      String userId,
-                                      MimeMessage emailContent)
-            throws MessagingException, IOException {
-        Message message = createMessageWithEmail(emailContent);
-        message = service.users().messages().send(userId, message).execute();
-
-        return message;
-    }
-
-
-
 
 
 }

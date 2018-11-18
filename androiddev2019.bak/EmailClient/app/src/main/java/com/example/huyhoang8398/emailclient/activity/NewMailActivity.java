@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.widget.EditText;
 
 import com.example.huyhoang8398.emailclient.R;
+import com.example.huyhoang8398.emailclient.interfaces.GmailDraft;
 import com.example.huyhoang8398.emailclient.interfaces.GmailSendMail;
 
 public class NewMailActivity extends AppCompatActivity {
@@ -62,12 +63,24 @@ public class NewMailActivity extends AppCompatActivity {
 
     }
 
+    private void createDraft(){
+        String from = ed_from.getText().toString();
+        String to = ed_to.getText().toString();
+        String subject = ed_subject.getText().toString();
+        String content = ed_content.getText().toString();
+
+
+        new GmailDraft(this).execute(to,from,subject,content);
+
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         int id = item.getItemId();
         if (id == android.R.id.home) {
+            createDraft();
             this.finish();
         }
         switch (item.getItemId()) {
