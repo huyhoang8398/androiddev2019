@@ -104,7 +104,7 @@ public class GmailAPIRequester extends AsyncTask<String, Void, List<Message>> {
     }
 
     public List<Message> listMessagesMatchingQuery(String userId, String query) throws IOException {
-        long maxResult = 3;
+        long maxResult = 10;
         ListMessagesResponse response = service.users().messages().list(userId).setQ(query)
                 .setMaxResults(maxResult).execute();
         List<Message> messages = new ArrayList<Message>();
