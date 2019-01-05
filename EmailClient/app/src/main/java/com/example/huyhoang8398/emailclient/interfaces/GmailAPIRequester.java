@@ -16,21 +16,22 @@ import com.google.api.services.gmail.model.ListMessagesResponse;
 import com.google.api.services.gmail.model.Message;
 import com.google.api.services.gmail.model.MessagePart;
 
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.binary.StringUtils;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class GmailAPIRequester extends AsyncTask<Void, Void, List<Message>> {
+public class GmailAPIRequester extends AsyncTask<String, Void, List<Message>> {
 
     private APIListener listener;
     private Context context;
     private Gmail service;
-
     public void setListener(APIListener listener) {
         this.listener = listener;
     }
-
     public GmailAPIRequester(Context context) {
         this.context = context;
     }
@@ -65,9 +66,11 @@ public class GmailAPIRequester extends AsyncTask<Void, Void, List<Message>> {
     }
 
     @Override
-    protected List<Message> doInBackground(Void... voids) {
+    protected List<Message> doInBackground(String... param) {
+        String category = param[0];
+
         try {
-            List<Message> messages = listMessagesMatchingQuery("me", "");
+            List<Message> messages = listMessagesMatchingQuery("me", category);
             List<Message> emails = new ArrayList<>();
             for (Message message : messages) {
                 emails.add(getEmailFormMessage(message));
@@ -89,13 +92,10 @@ public class GmailAPIRequester extends AsyncTask<Void, Void, List<Message>> {
         try {
             Message messageDetail = service.users().messages().get("me", message.getId()).execute();
             ArrayList<String> contents = new ArrayList<>();
-
             MessagePart part = messageDetail.getPayload();
-
             for (int i = 0; i < part.getHeaders().size(); i++) {
                 contents.add(part.getHeaders().get(i).getName() + " -- " + part.getHeaders().get(i).getValue());
             }
-
             return messageDetail;
         } catch (IOException e) {
             e.printStackTrace();
@@ -105,14 +105,15 @@ public class GmailAPIRequester extends AsyncTask<Void, Void, List<Message>> {
 
     public List<Message> listMessagesMatchingQuery(String userId, String query) throws IOException {
         long maxResult = 10;
-        ListMessagesResponse response = service.users().messages().list(userId).setMaxResults(maxResult).execute();
+        ListMessagesResponse response = service.users().messages().list(userId).setQ(query)
+                .setMaxResults(maxResult).execute();
         List<Message> messages = new ArrayList<Message>();
         messages.addAll(response.getMessages());
-        for (Message message : messages) {
-            System.out.println(message.toPrettyString());
-        }
         return messages;
     }
 
-     
+
+
+
+
 }

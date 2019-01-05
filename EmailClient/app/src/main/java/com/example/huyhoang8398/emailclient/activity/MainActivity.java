@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -19,11 +20,15 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.huyhoang8398.emailclient.R;
 import com.example.huyhoang8398.emailclient.fragments.AllMailFragment;
+import com.example.huyhoang8398.emailclient.fragments.DraftFragment;
+import com.example.huyhoang8398.emailclient.fragments.ImportantMailFragment;
 import com.example.huyhoang8398.emailclient.fragments.SendFragment;
 import com.example.huyhoang8398.emailclient.fragments.SpamFragment;
+import com.example.huyhoang8398.emailclient.fragments.StarredFragment;
 import com.example.huyhoang8398.emailclient.fragments.TrashFragment;
 import com.example.huyhoang8398.emailclient.interfaces.GmailSendMail;
 import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
@@ -49,6 +54,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     ImageView ProfPicNav;
     TextView NameNav, EmailNav;
     GoogleApiClient mGoogleApiClient;
+
+    @Override
+    protected void onStart() {
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+        mGoogleApiClient.connect();
+        super.onStart();
+    }
 
 
     @Override
@@ -76,8 +93,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         String nameNav = intent.getStringExtra("name");
         String emailNav = intent.getStringExtra("email");
-        String imgUrlNav = intent.getStringExtra("img_prof");
-        Glide.with(this).load(imgUrlNav).into(ProfPicNav);
+//        String imgUrlNav = intent.getStringExtra("img_prof");
+//        Glide.with(this).load(imgUrlNav).into(ProfPicNav);
 
 
         NameNav.setText(nameNav);
@@ -88,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
 
         if (savedInstanceState == null) {
-            getSupportActionBar().setTitle("All inboxes");
+            getSupportActionBar().setTitle("All inbox");
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AllMailFragment()).commit();
             navigationView.setCheckedItem(R.id.nav_email);
         }
@@ -109,6 +126,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         return true;
     }
+    @Override
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.action_refesh:
+                finish();
+                startActivity(getIntent());
+        }
+        return super.onOptionsItemSelected(item);
+
+    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -120,7 +149,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         new SendFragment()).commit();
                 break;
             case R.id.nav_email:
-                getSupportActionBar().setTitle("All inboxes");
+                getSupportActionBar().setTitle("All inbox");
 
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         new AllMailFragment()).commit();
@@ -136,6 +165,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         new TrashFragment()).commit();
+                break;
+            case R.id.nav_draft:
+                getSupportActionBar().setTitle("Draft");
+
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        new DraftFragment()).commit();
+                break;
+            case R.id.nav_important:
+                getSupportActionBar().setTitle("Important");
+
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        new ImportantMailFragment()).commit();
+                break;
+            case R.id.nav_star:
+                getSupportActionBar().setTitle("Starred");
+
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        new StarredFragment()).commit();
                 break;
 
 
@@ -158,6 +205,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         Toast.makeText(getApplicationContext(), "Logged Out", Toast.LENGTH_SHORT).show();
                         mGoogleApiClient.clearDefaultAccountAndReconnect();
                         Intent i = new Intent(getApplicationContext(), LoginActivity.class);
+                        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(i);
                     }
                 });

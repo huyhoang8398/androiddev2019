@@ -8,13 +8,20 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.huyhoang8398.emailclient.R;
+import com.example.huyhoang8398.emailclient.interfaces.GmailDraft;
+import com.example.huyhoang8398.emailclient.interfaces.GmailSendMail;
 
 public class NewMailActivity extends AppCompatActivity {
     private static final int PICK_IMAGE = 100;
     MenuItem attachment;
     Uri imageUri;
+
+    EditText ed_from, ed_to, ed_subject, ed_content;
+
     public NewMailActivity() {
 
     }
@@ -23,6 +30,11 @@ public class NewMailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_mail);
+
+        ed_from = findViewById(R.id.new_mail_from);
+        ed_content =findViewById(R.id.new_mail_compose);
+        ed_to = findViewById(R.id.new_mail_to);
+        ed_subject = findViewById(R.id.new_mail_subject);
 
         // edit action bar
         ActionBar newMailBar = getSupportActionBar();
@@ -34,8 +46,44 @@ public class NewMailActivity extends AppCompatActivity {
         /// add back button
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
+
     }
     /// add back button
+
+
+    private void sendMail() {
+        String from = ed_from.getText().toString();
+        String to = ed_to.getText().toString();
+        String subject = ed_subject.getText().toString();
+        String content = ed_content.getText().toString();
+
+        if (to.matches("") || from.matches("") || content.matches("") || subject.matches("")) {
+            Toast.makeText(this, "You have to input full information", Toast.LENGTH_SHORT).show();
+            return;
+        } else {
+
+            new GmailSendMail(this).execute(to, from, subject, content);
+            Toast.makeText(this, "The message has been sent", Toast.LENGTH_SHORT).show();
+
+
+        }
+    }
+
+    private void createDraft(){
+        String from = ed_from.getText().toString();
+        String to = ed_to.getText().toString();
+        String subject = ed_subject.getText().toString();
+        String content = ed_content.getText().toString();
+
+
+        new GmailDraft(this).execute(to,from,subject,content);
+        Toast.makeText(this, "The message has been saved to draft", Toast.LENGTH_SHORT).show();
+
+
+
+    }
 
 
     @Override
@@ -43,12 +91,18 @@ public class NewMailActivity extends AppCompatActivity {
 
         int id = item.getItemId();
         if (id == android.R.id.home) {
+            createDraft();
             this.finish();
         }
         switch (item.getItemId()) {
             case R.id.attach_img:
                 openGallery();
 
+                break;
+
+            case R.id.send:
+                sendMail();
+                this.finish();
                 break;
         }
 

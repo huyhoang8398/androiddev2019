@@ -9,11 +9,13 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccoun
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
-import com.google.api.client.util.Base64;
 import com.google.api.client.util.ExponentialBackOff;
 import com.google.api.services.gmail.Gmail;
 import com.google.api.services.gmail.GmailScopes;
+import com.google.api.services.gmail.model.Draft;
 import com.google.api.services.gmail.model.Message;
+
+import org.apache.commons.codec.binary.Base64;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -30,7 +32,7 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
-public class GmailSendMail extends AsyncTask<Void, Void, List<Message>> {
+public class GmailSendMail extends AsyncTask<String, Void, Message> {
 
     private APIListener listener;
     private Context context;
@@ -74,88 +76,97 @@ public class GmailSendMail extends AsyncTask<Void, Void, List<Message>> {
     }
 
     @Override
-    protected List<Message> doInBackground(Void... voids) {
+    protected Message doInBackground(String... params) {
 
-        String from = "nghiadvcn@gmail.com";
-        String to = "nghiadvptit@gmail.com";
-        String body = "Test mail";
-        String subject = "subject";
+        String from = params[0];
+        String to = params[1];
+        String subject = params[2];
+        String body = params[3];
+
 
         try {
-            sendMessage(service, "me", createEmail(to, from, subject, body));
+            MimeMessage mimeMessage = createEmail(to,from,subject,body);
+            //Message messageMail = createMessageWithEmail(mimeMessage);
+            Draft draft = createDraft(service,"me", mimeMessage);
+            Message result = sendMessage(service,"me",mimeMessage);
+            return result;
+
         } catch (MessagingException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+
         return null;
     }
 
     @Override
-    protected void onPostExecute(List<Message> email) {
+    protected void onPostExecute(Message email) {
         super.onPostExecute(email);
         //listener.onRequestSuccess(email);
     }
 
-    private String sendMessage(Gmail service, String userId, MimeMessage email)
-            throws MessagingException, IOException {
-        Message message = createMessageWithEmail(email);
-        // GMail's official method to send email with oauth2.0
-        message = service.users().messages().send(userId, message).execute();
-
-        System.out.println("Message id: " + message.getId());
-        System.out.println(message.toPrettyString());
-        return message.getId();
-    }
-
-    private MimeMessage createEmail(String to, String from, String subject, String bodyText) throws MessagingException {
+    public static MimeMessage createEmail(String to,
+                                          String from,
+                                          String subject,
+                                          String bodyText)
+            throws MessagingException {
         Properties props = new Properties();
         Session session = Session.getDefaultInstance(props, null);
 
         MimeMessage email = new MimeMessage(session);
-        InternetAddress tAddress = new InternetAddress(to);
-        InternetAddress fAddress = new InternetAddress(from);
 
-        email.setFrom(fAddress);
-        email.addRecipient(javax.mail.Message.RecipientType.TO, tAddress);
+        email.setFrom(new InternetAddress(from));
+        email.addRecipient(javax.mail.Message.RecipientType.TO,
+                new InternetAddress(to));
         email.setSubject(subject);
-
-        // Create Multipart object and add MimeBodyPart objects to this object
-        Multipart multipart = new MimeMultipart();
-
-        // Changed for adding attachment and text
-        // This line is used for sending only text messages through mail
-        // email.setText(bodyText);
-
-        BodyPart textBody = new MimeBodyPart();
-        textBody.setText(bodyText);
-        multipart.addBodyPart(textBody);
-
-//        if (!(activity.fileName.equals(""))) {
-//            // Create new MimeBodyPart object and set DataHandler object to this object
-//            MimeBodyPart attachmentBody = new MimeBodyPart();
-//            String filename = activity.fileName; // change accordingly
-//            DataSource source = new FileDataSource(filename);
-//            attachmentBody.setDataHandler(new DataHandler(source));
-//            attachmentBody.setFileName(filename);
-//            multipart.addBodyPart(attachmentBody);
-//        }
-
-        // Set the multipart object to the message object
-        email.setContent(multipart);
+        email.setText(bodyText);
         return email;
     }
 
-    private Message createMessageWithEmail(MimeMessage email)
+
+    public static Message createMessageWithEmail(MimeMessage emailContent)
             throws MessagingException, IOException {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        email.writeTo(bytes);
-        String encodedEmail = Base64.encodeBase64URLSafeString(bytes.toByteArray());
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        emailContent.writeTo(buffer);
+        byte[] bytes = buffer.toByteArray();
+        String encodedString = new String(Base64.encodeBase64(bytes));
+//        String encodedEmail = Base64.encodeBase64URLSafeString(bytes);
         Message message = new Message();
-        message.setRaw(encodedEmail);
+        message.setRaw(encodedString);
         return message;
     }
+
+    public  Draft createDraft(Gmail service,
+                                    String userId,
+                                    MimeMessage emailContent)
+            throws MessagingException, IOException {
+        Message message = createMessageWithEmail(emailContent);
+//        String userID = "me";
+        Draft draft = new Draft();
+        draft.setMessage(message);
+        draft = service.users().drafts().create(userId, draft).execute();
+
+        System.out.println("Draft id: " + draft.getId());
+        System.out.println(draft.toPrettyString());
+        return draft;
+    }
+
+
+
+    public static Message sendMessage(Gmail service,
+                                      String userId,
+                                      MimeMessage emailContent)
+            throws MessagingException, IOException {
+        Message message = createMessageWithEmail(emailContent);
+        message = service.users().messages().send(userId, message).execute();
+
+        return message;
+    }
+
+
+
 
 
 }

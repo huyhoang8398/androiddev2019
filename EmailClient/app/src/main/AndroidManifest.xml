@@ -24,6 +24,9 @@
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity android:name=".activity.NewMailActivity" />
         <activity android:name=".activity.LoginActivity">
+        </activity>
+        <activity android:name=".activity.Boot"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -31,6 +34,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.DetailActivity"></activity>
+        <activity android:name=".activity.ReplyActivity"></activity>
     </application>
 
 </manifest>

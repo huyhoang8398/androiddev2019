@@ -14,22 +14,18 @@ import com.example.huyhoang8398.emailclient.activity.NewMailActivity;
 import com.example.huyhoang8398.emailclient.R;
 
 
-public class TrashFragment extends Fragment {
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_trash, container,false);
+public class TrashFragment extends BaseFragment {
+
+    public TrashFragment() {
+        nameCurrentFragment = "Trash";
     }
+
+    // Inflate the view for the fragment based on layout XML
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        ImageButton sendBtn = view.findViewById(R.id.sendBtn1);
-        sendBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), NewMailActivity.class);
-                startActivity(intent);
-            }
-        });
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = super.onCreateView(inflater, container, savedInstanceState);
+        String category = "in:trash";
+        api.execute(category);
+        return view;
     }
 }
